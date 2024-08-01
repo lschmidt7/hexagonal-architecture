@@ -1,27 +1,41 @@
 
-import { expect, test } from 'vitest'
+import { expect, test, describe, vi, beforeEach, afterEach } from 'vitest'
 import { User } from "./user";
 
-test('test creation of user with legal age', () => {
-    let user = new User('Leonardo', 19)
+describe('tests of user creation', () => {
 
-    user.enable()
+    beforeEach(() => {
+        vi.useFakeTimers()
 
-    expect(user.getStatus()).toBe(true)
-})
+        const date = new Date(2023, 1, 1)
+        vi.setSystemTime(date) // mock current date do método enable
+    })
 
-test('test creation of user with ilegal age', () => {
-    let user = new User('Leonardo', 16)
+    afterEach(() => {
+        vi.useRealTimers()
+    })
 
-    user.enable()
-
-    expect(user.getStatus()).toBe(false)
-})
-
-test('test user with empty name', () => {
-    let user = new User('', 16)
-
-    let valid = user.isValid()
-
-    expect(valid).toBe(false)
+    test('test creation of user with legal age', () => {
+        let user = new User('Leonardo', new Date(1994, 4, 23))
+    
+        user.enable()
+    
+        expect(user.getStatus()).toBe(true)
+    })
+    
+    test('test creation of user with ilegal age', () => {
+        let user = new User('Leonardo', new Date(2010, 5, 23))
+    
+        user.enable()
+    
+        expect(user.getStatus()).toBe(false)
+    })
+    
+    test('test user with empty name', () => {
+        let user = new User('', new Date(1994, 5, 23))
+    
+        let valid = user.isValid()
+    
+        expect(valid).toBe(false)
+    })
 })

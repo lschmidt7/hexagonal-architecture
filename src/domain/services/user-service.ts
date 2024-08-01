@@ -1,13 +1,13 @@
 import { User, UserInterface } from "../entities/user";
 
 interface UserServiceInterface {
-    getUser(id: number): UserInterface
-    createUser(name: string, idade: number): boolean
-    enableUser(user: UserInterface): boolean
-    disableUser(user: UserInterface): boolean
+    get(id: number): UserInterface
+    create(name: string, birthDate: Date): boolean
+    enable(user: UserInterface): boolean
+    disable(user: UserInterface): boolean
 }
 
-interface UserPersistenceInterface {
+export interface UserPersistenceInterface {
     get(id: number): UserInterface
     save(user: UserInterface): boolean
 }
@@ -18,22 +18,26 @@ export class UserService implements UserServiceInterface {
         private persistence: UserPersistenceInterface
     ) {}
 
-    getUser(id: number): UserInterface {
+    get(id: number): UserInterface {
         let user = this.persistence.get(id)
         return user
     }
 
-    createUser(name: string, idade: number): boolean {
-        let user = new User(name, idade)
-        let success = this.persistence.save(user)
+    create(name: string, birthDate: Date): boolean {
+        let user = new User(name, birthDate)
+        let validUser = user.isValid()
+        let success = false
+        if (validUser) {
+            success = this.persistence.save(user)
+        }
         return success
     }
 
-    enableUser(user: UserInterface): boolean {
+    enable(user: UserInterface): boolean {
         return true
     }
 
-    disableUser(user: UserInterface): boolean {
+    disable(user: UserInterface): boolean {
         return true
     }
 }

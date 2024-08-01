@@ -2,7 +2,7 @@
 export interface UserInterface {
     getID(): number | undefined
     getName(): string
-    getIdade(): number
+    getBirthDate(): Date
     getStatus(): boolean
     enable(): boolean
     disable(): boolean
@@ -16,7 +16,7 @@ export class User implements User {
 
     constructor(
         private name: string,
-        private idade: number,
+        private birthDate: Date
     ){
         this.status = false
     }
@@ -29,8 +29,8 @@ export class User implements User {
         return this.id
     }
 
-    getIdade(): number {
-        return this.idade
+    getBirthDate(): Date {
+        return this.birthDate
     }
 
     getStatus(): boolean {
@@ -38,7 +38,8 @@ export class User implements User {
     }
 
     enable(): boolean {
-        if (this.idade >= 18) {
+        let valid = this.isValid()
+        if (valid) {
             this.status = true
             return true
         }
@@ -52,8 +53,15 @@ export class User implements User {
 
     isValid(): boolean {
         if (this.name == '') {
-            this.status = false
+            return false
         }
-        return this.status
+        
+        let birthYear = this.birthDate.getFullYear()
+        let currentYear = new Date().getFullYear()
+        if (currentYear - birthYear < 18) {
+            return false
+        }
+        
+        return true
     }
 }
