@@ -10,16 +10,13 @@ export interface UserInterface {
 }
 
 export class User implements User {
-    
-    private id?: number
-    private status: boolean
 
     constructor(
         private name: string,
-        private birthDate: Date
-    ){
-        this.status = false
-    }
+        private birthDate: Date,
+        private status: boolean = false,
+        private id: number = -1,
+    ){}
 
     getName(): string {
         return this.name
